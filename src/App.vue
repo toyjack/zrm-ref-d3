@@ -1,10 +1,7 @@
 <script setup>
-import { ref, onMounted, watchEffect } from "vue";
-// import useResizeObserver from "./resizeObserver";
-
+import { ref, onMounted } from "vue";
 import * as d3 from "d3";
 import data from "./data";
-import { isArray, isString } from "@vue/shared";
 
 const svgRef = ref(null);
 
@@ -48,6 +45,30 @@ const make_tree = (data) => {
   return tree;
 };
 
+const download = () => {
+  var svg = document.querySelector("svg");
+  var svgData = new XMLSerializer().serializeToString(svg);
+  var canvas = document.createElement("canvas");
+  canvas.width = svg.width.baseVal.value;
+  canvas.height = svg.height.baseVal.value;
+
+  var ctx = canvas.getContext("2d");
+  var image = new Image();
+  image.onload = () => {
+    ctx.drawImage(image, 0, 0);
+    ctx.globalCompositeOperation = "destination-over";
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    var a = document.createElement("a");
+    a.href = canvas.toDataURL("image/png");
+    a.setAttribute("download", "image.png");
+    a.dispatchEvent(new MouseEvent("click"));
+  };
+  image.src =
+    "data:image/svg+xml;charset=utf-8;base64," +
+    btoa(unescape(encodeURIComponent(svgData)));
+};
+
 onMounted(() => {
   const width = 2600;
   const radius = width / 2;
@@ -60,11 +81,9 @@ onMounted(() => {
   );
   console.log(root);
   const svg = d3.select(svgRef.value);
-  svg.attr("width",width).attr("height",width)
-  svg
-    .attr("viewBox",`-${radius} -${radius} ${width} ${width}`)
-    .attr("preserveAspectRatio","xMidYMid meet")
-  
+  svg.attr("width", width).attr("height", width);
+  svg.attr("viewBox", `-${radius} -${radius} ${width} ${width}`);
+
   svg
     .append("g")
     .attr("fill", "none")
@@ -124,12 +143,15 @@ onMounted(() => {
     .lower()
     .attr("stroke", "white");
 
-  // svg.attr("viewBox", autoBox)
-   
+  const svg_data = svg.node();
+  console.log(svg_data);
 });
 </script>
 
 <template>
+  <div>
+    <button @click="download()">download</button>
+  </div>
   <div ref="resizeRef">
     <svg ref="svgRef">
       <g class="x-axis" />
@@ -137,3 +159,9 @@ onMounted(() => {
     </svg>
   </div>
 </template>
+
+<style>
+svg {
+  background-color: white;
+}
+</style>
