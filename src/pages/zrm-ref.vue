@@ -87,12 +87,17 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
-    <button @click="download()">Download</button>
+<div class="q-ma-xl ">
+    <div class="row justify-center q-col-gutter-md">
+      <div class="col-12 col-md-auto">
+        <q-btn color="primary" label="Download" @click.prevent="download()" />
+      </div>
+    </div>
   </div>
-  <div ref="resizeRef">
-    <svg ref="svgRef">
-    </svg>
+  <div class="row justify-center">
+    <div class="col-md-auto">
+      <svg ref="svgRef" ></svg>
+    </div>
   </div>
 </template>
 
