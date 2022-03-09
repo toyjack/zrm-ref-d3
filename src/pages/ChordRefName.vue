@@ -10,7 +10,7 @@ const data = data2
 
 const svgRef = ref(null);
 
-const width = 2000
+const width = 1000
 const height = width
 const innerRadius = Math.min(width, height) * 0.5 - 100
 const outerRadius = innerRadius + 30
@@ -20,7 +20,7 @@ const arc = d3.arc()
 const ribbon = d3.ribbon()
   .radius(innerRadius - 1)
   .padAngle(1 / innerRadius)
-const chord = d3.chordDirected()
+const chord = d3.chord()
   .padAngle(1 / innerRadius)
   .sortSubgroups(d3.descending)
   .sortChords(d3.descending)
@@ -43,6 +43,7 @@ for (const record of data) {
 onMounted(() => {
 
   const chords = chord(matrix);
+  // console.log(chords)
 
   const svg = d3.select(svgRef.value)
     .append("svg")
@@ -81,7 +82,7 @@ onMounted(() => {
     .attr("fill", d => color(names[d.target.index]))
     .attr("d", ribbon)
     .append("title")  //ribbon加上提示
-    .text(d => `${names[d.source.index]} → ${names[d.target.index]} ${d.source.value}`);
+    .text(d => `${names[d.source.index]} と ${names[d.target.index]} ${d.source.value}`);
 })
 
 </script>

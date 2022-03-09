@@ -10,7 +10,7 @@ const data = data2
 
 const svgRef = ref(null);
 
-const width = 954
+const width = 600
 const height = width
 const innerRadius = Math.min(width, height) * 0.5 - 100
 const outerRadius = innerRadius + 10
@@ -21,7 +21,7 @@ const arc = d3.arc()
 const ribbon = d3.ribbon()
   .radius(innerRadius - 1)
   .padAngle(2 / innerRadius)
-const chord = d3.chordDirected()
+const chord = d3.chord()
   .padAngle(10 / innerRadius)
   .sortSubgroups(d3.descending)
   .sortChords(d3.descending)
@@ -47,9 +47,47 @@ for (const record of data) {
 onMounted(() => {
   const chords = chord(matrix);
 
+  // const res = d3.chord()
+  //   .padAngle(10 / innerRadius)
+  //   .sortSubgroups(d3.descending)
+  //   .sortChords(d3.descending)
+  //   (matrix)
+
   const svg = d3.select(svgRef.value)
     .append("svg")
-    .attr("viewBox", [-width / 2, -height / 2, width, height]);
+    .attr("viewBox", [-width / 2, -height / 2, width, height])
+
+  //   .datum(res)
+  //   .append("g")
+  //   .selectAll("g")
+  //   .data(function (d) { return d.groups; })
+  //   .enter()
+  //   .append("g")
+  //   .append("path")
+  //   .style("fill", "grey")
+  //   .style("stroke", "black")
+  //   .attr("d", d3.arc()
+  //     .innerRadius(200)
+  //     .outerRadius(210)
+  //   )
+
+  // svg
+  //   .datum(res)
+  //   .append("g")
+  //   .selectAll("path")
+  //   .data(function (d) { return d; })
+  //   .enter()
+  //   .append("path")
+  //   .attr("d", d3.ribbon()
+  //     .radius(innerRadius - 1)
+  //     .padAngle(2 / innerRadius)
+  //   )
+  //   .style("fill", "#69b3a2")
+  //   .style("stroke", "black");
+
+
+
+
   const group = svg.append("g")
     .attr("font-size", 10)
     .attr("font-family", "sans-serif")
