@@ -5,7 +5,7 @@ import routes from "./routes";
 const ifNavMenu = ref(false);
 </script>
 
-<template>
+ <template>
   <q-layout view="hHh lpR fFf">
     <q-header elevated class="bg-primary text-white" height-hint="98">
       <q-toolbar>
@@ -32,4 +32,6 @@ const ifNavMenu = ref(false);
       </q-page>
     </q-page-container>
   </q-layout>
-</template>
+</template> 
+
+
