@@ -5,7 +5,6 @@ import _ from 'lodash'
 import data2 from '../data2'
 import { download } from '../utils'
 
-
 const data = data2
 
 const svgRef = ref(null);
@@ -26,20 +25,17 @@ const chord = d3.chord()
   .sortSubgroups(d3.descending)
   .sortChords(d3.descending)
 
-
 const names = _.uniq(data.map(v => v.ref_type))
 const color = d3.scaleOrdinal(names, d3.quantize(d3.interpolateRainbow, names.length))
 const index = new Map(names.map((name, i) => [name, i]));
 const matrix = Array.from(index, () => new Array(names.length).fill(0));
 
-console.log(matrix)
 for (const record of data) {
   let source = record.ref_type
   let targets = data.filter(v => record.zr2id == v.zr2id).map(v => {
     let target = v.ref_type
     if (source != target) {
       matrix[index.get(source)][index.get(target)] += 1
-
     }
   })
 }
@@ -47,46 +43,9 @@ for (const record of data) {
 onMounted(() => {
   const chords = chord(matrix);
 
-  // const res = d3.chord()
-  //   .padAngle(10 / innerRadius)
-  //   .sortSubgroups(d3.descending)
-  //   .sortChords(d3.descending)
-  //   (matrix)
-
   const svg = d3.select(svgRef.value)
     .append("svg")
     .attr("viewBox", [-width / 2, -height / 2, width, height])
-
-  //   .datum(res)
-  //   .append("g")
-  //   .selectAll("g")
-  //   .data(function (d) { return d.groups; })
-  //   .enter()
-  //   .append("g")
-  //   .append("path")
-  //   .style("fill", "grey")
-  //   .style("stroke", "black")
-  //   .attr("d", d3.arc()
-  //     .innerRadius(200)
-  //     .outerRadius(210)
-  //   )
-
-  // svg
-  //   .datum(res)
-  //   .append("g")
-  //   .selectAll("path")
-  //   .data(function (d) { return d; })
-  //   .enter()
-  //   .append("path")
-  //   .attr("d", d3.ribbon()
-  //     .radius(innerRadius - 1)
-  //     .padAngle(2 / innerRadius)
-  //   )
-  //   .style("fill", "#69b3a2")
-  //   .style("stroke", "black");
-
-
-
 
   const group = svg.append("g")
     .attr("font-size", 10)
@@ -110,9 +69,8 @@ onMounted(() => {
     .text(d => names[d.index]);
 
   group.append("title")
-    .text(d => `${names[d.index]}
-  ${d3.sum(chords, c => (c.source.index === d.index) * c.source.value)} outgoing →
-  ${d3.sum(chords, c => (c.target.index === d.index) * c.source.value)} incoming ←`);
+    .text(d => `${names[d.index]}共起可能合計
+  ${d3.sum(chords, c => (c.source.index === d.index) * c.source.value)}`);
 
   svg.append("g")
     .attr("fill-opacity", 0.75)
@@ -123,7 +81,7 @@ onMounted(() => {
     .attr("fill", d => color(names[d.target.index]))
     .attr("d", ribbon)
     .append("title")  //ribbon加上提示
-    .text(d => `${names[d.source.index]} → ${names[d.target.index]} ${d.source.value}`);
+    .text(d => `${names[d.source.index]} と ${names[d.target.index]} ${d.source.value}`);
 })
 
 </script>

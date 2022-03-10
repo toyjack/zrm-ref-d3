@@ -81,7 +81,7 @@ onMounted(() => {
     .style("mix-blend-mode", "multiply")
     .attr("fill", d => color(names[d.target.index]))
     .attr("d", ribbon)
-    .append("title")  //ribbon加上提示
+    .append("title")
     .text(d => `${names[d.source.index]} と ${names[d.target.index]} ${d.source.value}`);
 })
 
